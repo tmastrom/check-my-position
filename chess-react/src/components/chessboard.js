@@ -9,12 +9,11 @@ export default function ChessGame() {
   const [game, setGame] = useState(new Chess());
   const [move, setMove] = useState(null);
 
-  useEffect(() => {
-    console.log("move",move);
-  }, [move]);
+  // useEffect(() => {
+  //   console.log("move",move);
+  // }, [move]);
 
   function safeGameMutate(modify) {
-
     setGame((g) => {
       const update = { ...g };
       modify(update);
@@ -32,7 +31,6 @@ export default function ChessGame() {
         promotion: "q", // always promote to a queen for example simplicity
       });
     });
-    console.log(game);
     return true;
   }
 
@@ -41,20 +39,34 @@ export default function ChessGame() {
     nextMove(game.fen(), setMove, () => 'There was an error analyzing this position');
   }
 
+  function resetPosition() {
+    setGame(new Chess());
+    setMove(null);
+  }
+
 
   return (
     <>
-      <div>
+      <div className='center-content-margin'>
         <Chessboard id="BasicBoard" position={game.fen()} onPieceDrop={onDrop} />
       </div>
-      <div>
-        <text>
-          { "Next Best Move is: " + move }
-        </text>
-      </div>
-      <div>
+      { move === null ? 
+        <div>
+        </div>
+        :
+        <div className='center-content-margin'>
+          <text>
+            { "Next Best Move is: " + move }
+          </text>
+        </div>
+      }
+      
+      <div className='center-content-margin'>
         <button onClick={ analyzePosition }>
           Analyze
+        </button>
+        <button onClick={ resetPosition }>
+          Reset
         </button>
       </div>
     </>
